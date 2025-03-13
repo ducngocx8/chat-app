@@ -1,0 +1,52 @@
+import UserList from "@/components/users/UserOnlineList";
+import ChatBox from "../components/chat/ChatBox";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { connectSocket } from "@/config/socket";
+import { IUser, setUser } from "@/slices/authSlice";
+import ChatHistoryList from "@/components/history/ChatHistoryList";
+
+const Chat = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user_login = useSelector((state: RootState) => state.auth.user);
+
+  // console.log("user_login", user);
+
+  useEffect(() => {
+    if (!user_login) {
+      navigate("/login", { replace: true });
+    } else {
+      // TH Refresh lại page => Bắt đầu kết nối lại => Kết nối thành công => Vào socket.on("connect", callback)
+      const socket = connectSocket();
+      socket.on("connect", () => {
+        socket.emit("user_connected", {
+          name: user_login.name,
+          address: user_login.address,
+        });
+      });
+      socket.on("userInfo", (user: IUser) => {
+        dispatch(setUser(user));
+      });
+    }
+    return () => {};
+  }, [user_login, navigate, dispatch]);
+
+  if (!user_login) return null;
+
+  return (
+    <>
+      <div className="ml-2">{"Tên tài khoản: " + user_login.name}</div>
+      <div className="ml-2">{"Địa chỉ: " + user_login.address}</div>
+      <div className="flex flex-row width-screen">
+        <UserList user_login={user_login} />
+        <ChatBox user_login={user_login} />
+        <ChatHistoryList user_login={user_login} />
+      </div>
+    </>
+  );
+};
+
+export default Chat;
