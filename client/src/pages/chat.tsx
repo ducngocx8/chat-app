@@ -7,6 +7,8 @@ import { RootState } from "@/store";
 import { connectSocket } from "@/config/socket";
 import { IUser, setUser } from "@/slices/authSlice";
 import ChatHistoryList from "@/components/history/ChatHistoryList";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -37,15 +39,26 @@ const Chat = () => {
   if (!user_login) return null;
 
   return (
-    <>
-      <div className="ml-2">{"Tên tài khoản: " + user_login.name}</div>
-      <div className="ml-2">{"Địa chỉ: " + user_login.address}</div>
+    <div className="w-screen h-screen">
+      <div className="w-screen flex flex-row justify-between items-center bg-gray-900 text-white pl-10 pr-10 pt-2 pb-2">
+        <div className="">SIMPLE CHAT APP</div>
+        <div className="flex flex-row">
+          <div className="ml-2">{"Tên tài khoản: " + user_login.name}</div>
+          <div className="ml-2">-</div>
+          <div className="ml-2">{"Địa chỉ: " + user_login.address}</div>
+        </div>
+        <Button className="!bg-gray-900">
+          <Link className="!text-white" to={"/logout"}>
+            Logout
+          </Link>
+        </Button>
+      </div>
       <div className="flex flex-row width-screen">
         <UserList user_login={user_login} />
         <ChatBox user_login={user_login} />
         <ChatHistoryList user_login={user_login} />
       </div>
-    </>
+    </div>
   );
 };
 
