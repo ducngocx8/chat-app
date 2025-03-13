@@ -40,10 +40,13 @@ const Chat = () => {
 
   return (
     <div className="w-screen h-screen">
-      <div className="w-screen flex flex-row justify-between items-center bg-gray-900 text-white pl-10 pr-10 pt-2 pb-2">
+      <div className="w-screen flex flex-row justify-between items-center bg-gray-50 pl-10 pr-10 pt-2 pb-2 border-b-2 border-gray-300">
         <div className="">SIMPLE CHAT APP</div>
-        <div className="flex flex-row">
-          <div className="ml-2">{"Tên tài khoản: " + user_login.name}</div>
+        <div className="flex flex-row items-center">
+          <img className="ml-2 w-7 h-7" src={user_login.avatar} />
+          <div className="ml-2">
+            Tên tài khoản: <b>{user_login.name}</b>
+          </div>
           <div className="ml-2">-</div>
           <div className="ml-2">{"Địa chỉ: " + user_login.address}</div>
         </div>
@@ -53,7 +56,7 @@ const Chat = () => {
           </Link>
         </Button>
       </div>
-      <div className="flex flex-row width-screen">
+      <div className="flex flex-row">
         <UserList user_login={user_login} />
         <ChatBox user_login={user_login} />
         <ChatHistoryList user_login={user_login} />

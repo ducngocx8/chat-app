@@ -302,7 +302,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
   };
 
   return (
-    <Card className="mx-auto min-w-lg p-4 !bg-white-900 text-white rounded-lg shadow-lg flex flex-col">
+    <Card className="mx-auto min-w-lg p-4 !bg-gray-100 text-white flex flex-col flex-2 rounded-none">
       <ChatHeader />
       <ChatFrame messages={messages} user_login={user_login} />
       <ChatInput

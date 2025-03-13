@@ -85,7 +85,7 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
   console.log("history_list", history_list);
 
   return (
-    <div className="p-6 max-w-md mx-auto">
+    <div className="p-6 max-w-md mx-auto bg-gray-100 flex-1 border-l border-gray-300 shadow-sm">
       <h2 className="text-xl font-bold mb-4">Lịch sử chát</h2>
       <div className="space-y-3">
         {history_list.map((msg) => (

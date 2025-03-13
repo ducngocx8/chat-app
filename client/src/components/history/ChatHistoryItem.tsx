@@ -34,7 +34,7 @@ export default function ChatHistoryItem({
       {/* Thông tin người dùng */}
       <CardContent className="p-0">
         <p className="font-semibold">{name}</p>
-        <p className="text-sm text-gray-500">{address}</p>
+        <p className="text-sm text-gray-500">{"Sống tại: " + address}</p>
         <p className="text-sm text-gray-500">
           {(user_login.user_id === message_end.sender_id ? "Bạn: " : "") +
             (message_end.text
@@ -45,7 +45,7 @@ export default function ChatHistoryItem({
               ? "Đã gửi một hình ảnh"
               : "")}
         </p>
-        <p className="text-sm text-gray-500">{message_end.time}</p>
+        <p className="text-sm text-gray-500">{"Lúc: " + message_end.time}</p>
       </CardContent>
     </Card>
   );

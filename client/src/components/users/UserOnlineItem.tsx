@@ -29,7 +29,7 @@ export default function UserOnlineItem({
       {/* Thông tin người dùng */}
       <CardContent className="p-0">
         <p className="font-semibold">{name}</p>
-        <p className="text-sm text-gray-500">{address}</p>
+        <p className="text-sm text-gray-500">{"Sống tại: " + address}</p>
       </CardContent>
     </Card>
   );
