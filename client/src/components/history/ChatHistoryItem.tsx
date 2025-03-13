@@ -36,7 +36,9 @@ export default function ChatHistoryItem({
         <p className="font-semibold">{name}</p>
         <p className="text-sm text-gray-500">{"Sống tại: " + address}</p>
         <p className="text-sm text-gray-500">
-          {(user_login.user_id === message_end.sender_id ? "Bạn: " : "") +
+          {(user_login.user_id === message_end.sender_id
+            ? "Bạn: "
+            : message_end.receiver_info?.name + ": ") +
             (message_end.text
               ? message_end.text
               : message_end.filename

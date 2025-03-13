@@ -25,7 +25,7 @@ import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { IUser, setUser } from "@/slices/authSlice";
-import { setUsers } from "@/slices/userListSlice";
+import { setUserJoin, setUsers } from "@/slices/userListSlice";
 
 const formSchema = z.object({
   name: z
@@ -63,22 +63,18 @@ export function LoginForm({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values);
-    // dispatch(
-    //   setUser({
-    //     id: "",
-    //     name: values.name,
-    //     address: values.address,
-    //     socket: null,
-    //   })
-    // );
     const socket = connectSocket();
     socket.emit("user_connected", {
       name: values.name,
       address: values.address,
     });
+
     socket.on("userInfo", (user: IUser) => {
       dispatch(setUser(user));
+    });
+
+    socket.on("user_join_last", (user: IUser) => {
+      dispatch(setUserJoin(user));
     });
 
     const handleGetUserOnline = (user_list: IUser[]) => {

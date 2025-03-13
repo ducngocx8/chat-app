@@ -3,10 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserListState {
   users: IUser[];
+  user_join_last: IUser | null;
 }
 
 const initialState: UserListState = {
   users: [],
+  user_join_last: null,
 };
 
 const userListSlice = createSlice({
@@ -16,14 +18,11 @@ const userListSlice = createSlice({
     setUsers: (state, action: PayloadAction<IUser[]>) => {
       state.users = action.payload;
     },
-    addUser: (state, action: PayloadAction<IUser>) => {
-      state.users.push(action.payload);
-    },
-    removeUser: (state, action: PayloadAction<string>) => {
-      state.users = state.users.filter((user) => user.user_id !== action.payload);
+    setUserJoin: (state, action: PayloadAction<IUser>) => {
+      state.user_join_last = action.payload;
     },
   },
 });
 
-export const { setUsers, addUser, removeUser } = userListSlice.actions;
+export const { setUsers, setUserJoin } = userListSlice.actions;
 export default userListSlice.reducer;

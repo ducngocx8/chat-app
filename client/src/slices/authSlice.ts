@@ -4,8 +4,8 @@ export interface IUser {
   user_id: string;
   name: string;
   address: string;
-    avatar: string;
-    online: boolean;
+  avatar: string;
+  online: boolean;
 }
 
 interface AuthState {
@@ -23,11 +23,8 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser | null>) => {
       state.user = action.payload;
     },
-    logout: (state) => {
-      state.user = null;
-    },
   },
 });
 
-export const { setUser, logout } = authSlice.actions;
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

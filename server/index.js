@@ -26,7 +26,7 @@ app.post("/file/web", uploadFileMiddleware, uploadFileWebsite);
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Địa chỉ của ứng dụng React
+    origin: "http://localhost:5173", // Địa chỉ của React FE
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -45,11 +45,12 @@ io.on("connection", (socket) => {
         user_id: String(socket.id),
         name: data.name,
         address: data.address,
-        avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+        avatar: `https://randomuser.me/api/portraits/women/2.jpg`,
         online: true,
       });
       // sent info to user login only
       socket.emit("userInfo", users_online[users_online.length - 1]);
+      io.emit("user_join_last", users_online[users_online.length - 1]);
     }
     // console.log("getOnlineUsers", users_online);
     io.emit("getOnlineUsers", users_online);
@@ -157,6 +158,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Ngắt kết nối
   socket.on("disconnect", () => {
     console.log("A user disconnected ", socket.id);
     users_online = users_online.filter((item) => item.user_id !== socket.id);

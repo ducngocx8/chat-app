@@ -51,9 +51,9 @@ export default function UserOnlineList({ user_login }: { user_login: IUser }) {
   console.log("user_online_list", user_online_list);
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-gray-100 flex-1 border-r border-gray-300 shadow-sm">
+    <div className="p-6 bg-gray-100 flex-1 border-b lg:border-r border-gray-300 shadow-sm">
       <h2 className="text-xl font-bold mb-4">🟢 Người dùng đang online</h2>
-      <div className="space-y-3">
+      <div className="space-y-3 h-[90%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 pr-4 pb-2">
         {user_online_list.map((user_item) => (
           <UserOnlineItem
             key={user_item.user_id}

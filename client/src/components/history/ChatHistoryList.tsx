@@ -57,8 +57,16 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
       Object.entries(localStorage).forEach(([key, value]) => {
         if (key.startsWith("chat_")) {
           const value_chat = JSON.parse(value);
-          if (Array.isArray(value_chat))
-            chatData.push(value_chat[value_chat.length - 1]);
+          if (Array.isArray(value_chat)) {
+            const chat_last: IMessage = value_chat[value_chat.length - 1];
+            if (
+              chat_last &&
+              (chat_last.receiver_id === user_login.user_id ||
+                chat_last.sender_id === user_login.user_id)
+            ) {
+              chatData.push(value_chat[value_chat.length - 1]);
+            }
+          }
         }
       });
       setHistoryList([...chatData]);
@@ -85,9 +93,9 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
   console.log("history_list", history_list);
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-gray-100 flex-1 border-l border-gray-300 shadow-sm">
+    <div className="p-6 bg-gray-100 flex-1 border-l border-gray-300 shadow-sm h-full">
       <h2 className="text-xl font-bold mb-4">Lịch sử chát</h2>
-      <div className="space-y-3">
+      <div className="space-y-3 h-[90%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 pr-4 pb-2">
         {history_list.map((msg) => (
           <ChatHistoryItem
             key={msg.message_id}

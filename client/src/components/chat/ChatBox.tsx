@@ -196,7 +196,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
       file: "",
       filename: "",
       image: result.uri,
-      time: dayjs().format("HH:mm"),
+      time: dayjs().format("HH:mm:ss"),
       sender_info: user_login,
       receiver_info: user_choose,
     };
@@ -272,7 +272,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
         image: "",
         filename: result.filename,
         file: result.uri, // URL của file trên server
-        time: dayjs().format("HH:mm"),
+        time: dayjs().format("HH:mm:ss"),
         sender_info: user_login,
         receiver_info: user_choose,
       };
@@ -302,7 +302,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
   };
 
   return (
-    <Card className="mx-auto min-w-lg p-4 !bg-gray-100 text-white flex flex-col flex-2 rounded-none">
+    <Card className="mx-auto p-4 m-0 !bg-gray-100 text-white flex flex-col flex-2 rounded-none">
       <ChatHeader />
       <ChatFrame messages={messages} user_login={user_login} />
       <ChatInput

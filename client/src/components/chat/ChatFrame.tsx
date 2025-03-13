@@ -37,8 +37,8 @@ const ChatFrame = ({
           <div
             className={`p-3 rounded-2xl max-w-[75%] ${
               msg.sender_id === user_login.user_id
-                ? "bg-gray-900 text-white"
-                : "bg-muted text-gray-900"
+                ? "bg-gray-700 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
           >
             <p>
@@ -50,7 +50,7 @@ const ChatFrame = ({
                 <>
                   {msg.filename} |{" "}
                   <a href={msg.file} target="_blank">
-                    Truy cập 111
+                    Truy cập
                   </a>
                 </>
               )}
@@ -58,7 +58,7 @@ const ChatFrame = ({
             <p className="text-xs text-gray-400 text-right mt-1">{msg.time}</p>
           </div>
           {msg.sender_id === user_login.user_id && (
-            <User className="w-8 h-8 text-white bg-blue-600 p-1 rounded-full" />
+            <User className="w-8 h-8 text-white bg-sky-500/75 p-1 rounded-full" />
           )}
         </motion.div>
       ))}
