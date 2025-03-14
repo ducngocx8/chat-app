@@ -4,7 +4,6 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 
 function Header({ user_login }: { user_login: IUser | null }) {
-  console.log("CHẠY LẠI HEADER");
   return (
     <div className="w-screen flex flex-col lg:flex-row justify-between items-center bg-gray-50 pl-10 pr-10 pt-2 pb-2 border-b-2 border-gray-300">
       <div className="">
