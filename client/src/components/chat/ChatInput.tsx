@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CirclePlus, File, Image, Send, Smile } from "lucide-react";
 import { IUser } from "@/slices/authSlice";
 import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -167,4 +167,4 @@ const ChatInput = ({
   );
 };
 
-export default ChatInput;
+export default memo(ChatInput);

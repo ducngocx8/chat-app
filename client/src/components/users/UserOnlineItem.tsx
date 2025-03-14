@@ -1,8 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { IUser } from "@/slices/authSlice";
+import { memo } from "react";
 
-export default function UserOnlineItem({
+function UserOnlineItem({
   user,
   onClick,
 }: {
@@ -34,3 +35,6 @@ export default function UserOnlineItem({
     </Card>
   );
 }
+
+const UserOnlineItemMemo = memo(UserOnlineItem);
+export default UserOnlineItemMemo;

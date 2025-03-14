@@ -1,5 +1,6 @@
 import { io, Socket } from "socket.io-client";
-const BACKEND_BASE = "http://localhost:7000";
+export const BACKEND_BASE = "http://localhost:7000";
+// export const BACKEND_BASE = "https://chat-api.kiemthecaofree.com";
 let socket: Socket | null = null;
 
 export const getSocket = () => {

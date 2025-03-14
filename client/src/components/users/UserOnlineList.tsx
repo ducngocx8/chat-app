@@ -23,19 +23,26 @@
 //   },
 // ];
 
-import UserOnlineItem from "@/components/users/UserOnlineItem";
-import { useOnlineUsers } from "@/hooks/useOnlineUsers";
+import UserOnlineItemMemo from "@/components/users/UserOnlineItem";
+// import { useOnlineUsers } from "@/hooks/useOnlineUsers";
 import { IUser } from "@/slices/authSlice";
 import { setSelectedUser } from "@/slices/chatSlice";
 import { RootState } from "@/store";
-import { useDispatch, useSelector } from "react-redux";
+import { memo } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
-export default function UserOnlineList({ user_login }: { user_login: IUser }) {
+function UserOnlineList({ user_login }: { user_login: IUser }) {
   const dispatch = useDispatch();
-  const user_online_list = useOnlineUsers();
+  // const user_online_list = useOnlineUsers();
+
+  const user_online_list = useSelector(
+    (state: RootState) => state.userList.users,
+    shallowEqual
+  );
 
   const user_choose = useSelector(
-    (state: RootState) => state.chat.selectedUser
+    (state: RootState) => state.chat.selectedUser,
+    shallowEqual
   );
   const handleUserClick = (user_click: IUser) => {
     if (
@@ -55,7 +62,7 @@ export default function UserOnlineList({ user_login }: { user_login: IUser }) {
       <h2 className="text-xl font-bold mb-4">🟢 Người dùng đang online</h2>
       <div className="space-y-3 h-[90%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 pr-4 pb-2">
         {user_online_list.map((user_item) => (
-          <UserOnlineItem
+          <UserOnlineItemMemo
             key={user_item.user_id}
             user={user_item}
             onClick={() => {
@@ -67,3 +74,6 @@ export default function UserOnlineList({ user_login }: { user_login: IUser }) {
     </div>
   );
 }
+
+const UserOnlineListMemo = memo(UserOnlineList);
+export default UserOnlineListMemo;

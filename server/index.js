@@ -59,13 +59,6 @@ io.on("connection", (socket) => {
   // io.emit sent to all users connected client
   io.emit("getOnlineUsers", users_online);
 
-  // Khi user vào chat, tham gia vào room chung
-  socket.on("joinRoom", ({ user1, user2 }) => {
-    const room = [user1, user2].sort().join("_"); // Tạo room ID duy nhất
-    console.log("JOIN ROOM", room);
-    socket.join(room);
-  });
-
   // send text / image / file message
   socket.on(
     "send_message",
@@ -96,39 +89,14 @@ io.on("connection", (socket) => {
         });
         callback({ status: true }); // Xác nhận với client
       } else {
-        io.to(senderSocketId).emit({
-          status: false,
-          text: "Người nhận hiện không online!",
-        });
+        // io.to(senderSocketId).emit({
+        //   status: false,
+        //   text: "Người nhận hiện không online!",
+        // });
         callback({ status: false });
       }
     }
   );
-
-  // socket.on("send_message", ({ sender_id, receiver_id, text }) => {
-  //   const room = [sender_id, receiver_id].sort().join("_");
-  //   const receiverSocket = users_online.find(
-  //     (user) => user.user_id == receiver_id
-  //   );
-  //   const receiverSocketId = receiverSocket?.user_id;
-  //   const senderSocket = users_online.find((user) => user.user_id == sender_id);
-  //   const senderSocketId = senderSocket?.user_id;
-
-  //   io.to(room).emit("receive_message", {
-  //     message_id: String(Date.now()),
-  //     sender_id: String(senderSocketId),
-  //     receiver_id: String(receiverSocketId),
-  //     text: text,
-  //     sender: "sender",
-  //     time: String(Date.now()),
-  //     sender_info: senderSocket,
-  //     receiver_info: receiverSocket,
-  //   }); // Gửi tin nhắn đến đúng room
-  // });
-  // socket.on("joinRoom", ({ user1, user2 }) => {
-  //   const room = [user1, user2].sort().join("_");
-  //   socket.join(room);
-  // });
 
   // Khi user gõ phím, gửi "typing" đến đúng người nhận
   socket.on("typing", ({ sender_id, receiver_id }) => {

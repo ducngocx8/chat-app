@@ -1,10 +1,12 @@
 import { RootState } from "@/store";
 import { Bot } from "lucide-react";
-import { useSelector } from "react-redux";
+import { memo } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 
 const ChatHeader = () => {
   const currentReceiver = useSelector(
-    (state: RootState) => state.chat.selectedUser
+    (state: RootState) => state.chat.selectedUser,
+    shallowEqual
   );
   return (
     <div className="flex items-center gap-3 p-3 border-b border-gray-700">
@@ -19,4 +21,4 @@ const ChatHeader = () => {
   );
 };
 
-export default ChatHeader;
+export default memo(ChatHeader);

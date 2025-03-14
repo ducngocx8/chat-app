@@ -2,8 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { IUser } from "@/slices/authSlice";
 import { IMessage } from "@/slices/chatSlice";
+import { memo } from "react";
 
-export default function ChatHistoryItem({
+function ChatHistoryItem({
   user,
   onClick,
   message_end,
@@ -52,3 +53,6 @@ export default function ChatHistoryItem({
     </Card>
   );
 }
+
+const ChatHistoryItemMemo = memo(ChatHistoryItem);
+export default ChatHistoryItemMemo;

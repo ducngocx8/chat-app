@@ -25,5 +25,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/components/chat/ChatBox.tsx", "src/config/socket.ts"]
+  "include": ["src", "src/components/chat/ChatMain.tsx", "src/config/socket.ts"]
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { User, Bot } from "lucide-react";
 import { IUser } from "@/slices/authSlice";
@@ -67,4 +67,4 @@ const ChatFrame = ({
   );
 };
 
-export default ChatFrame;
+export default memo(ChatFrame);

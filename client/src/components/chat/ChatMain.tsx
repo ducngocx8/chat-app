@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import dayjs from "dayjs";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatFrame from "@/components/chat/ChatFrame";
-import { getSocket } from "@/config/socket";
+import { BACKEND_BASE, getSocket } from "@/config/socket";
 import { IUser } from "@/slices/authSlice";
 import { RootState } from "@/store";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IMessage, setMessage, setSelectedUser } from "@/slices/chatSlice";
 import { EmojiClickData } from "emoji-picker-react";
 
@@ -31,14 +31,18 @@ const saveMessages = (user1: string, user2: string, messages: IMessage[]) => {
   localStorage.setItem(key, JSON.stringify(messages));
 };
 
-export default function ChatBox({ user_login }: { user_login: IUser }) {
+function ChatMain({ user_login }: { user_login: IUser }) {
   const [typingUser, setTypingUser] = useState<IUser | null>(null);
   const dispatch = useDispatch();
   const user_choose = useSelector(
-    (state: RootState) => state.chat.selectedUser
+    (state: RootState) => state.chat.selectedUser,
+    shallowEqual
   );
 
-  const messages = useSelector((state: RootState) => state.chat.messages);
+  const messages = useSelector(
+    (state: RootState) => state.chat.messages,
+    shallowEqual
+  );
   const [input, setInput] = useState("");
   const socket = useMemo(() => getSocket(), []);
 
@@ -81,6 +85,18 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
 
     return () => {
       socket.off("receive_message", handleMessage);
+      socket.off("stopTyping", (sender: IUser) => {
+        if (typingUser?.user_id === sender.user_id) {
+          setTypingUser(null);
+        }
+      });
+      socket.off("typing", (sender: IUser) => {
+        if (sender.user_id === user_choose?.user_id) {
+          setTypingUser(sender);
+        } else {
+          setTypingUser(null);
+        }
+      });
     };
   }, [messages, dispatch, socket, typingUser, user_choose]);
 
@@ -119,18 +135,18 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
     const socket = getSocket();
 
     if (!socket.connected) {
-      console.warn("Không thể gửi tin nhắn, socket chưa kết nối!");
+      alert("Không thể gửi tin nhắn, socket chưa kết nối!");
       return;
     }
     socket.emit("send_message", newMessage, (response: { status: boolean }) => {
       console.log("ack", response);
       if (response.status) {
-        console.log("GỬi tin nhắn thành công");
+        console.log("Gửi tin nhắn thành công");
         const message_arr = [...messages, newMessage];
         saveMessages(newMessage.sender_id, newMessage.receiver_id, message_arr);
         dispatch(setMessage([...messages, newMessage]));
       } else {
-        console.log("GỬi tin nhắn thất bại");
+        alert("Hiện tại người dùng không online...");
       }
     });
     setInput("");
@@ -164,7 +180,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
       return;
     }
     if (!e.target?.files) {
-      console.log("e.target?.files[0]", "file không hợp lệ");
+      // console.log("e.target?.files[0]", "file không hợp lệ");
       return;
     }
     const fileImage = {
@@ -172,21 +188,21 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
       data: e.target.files[0],
     };
 
-    console.log("fileImage", fileImage);
+    // console.log("fileImage", fileImage);
 
     const formData = new FormData();
     formData.append("photo", fileImage.data);
-    const response = await fetch("http://localhost:7000" + "/image/web", {
+    const response = await fetch(`${BACKEND_BASE}/image/web`, {
       method: "POST",
       body: formData,
     });
     const result = await response.json();
     if (!result.status) {
-      console.log(result);
+      // console.log(result);
       alert("Upload Image thất bại");
       return;
     }
-    console.log(result);
+    // console.log(result);
 
     const newMessage: IMessage = {
       message_id: String(Date.now()),
@@ -204,12 +220,12 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
     socket.emit("send_message", newMessage, (response: { status: boolean }) => {
       console.log("ack", response);
       if (response.status) {
-        console.log("GỬi tin nhắn thành công");
+        console.log("Gửi tin nhắn thành công");
         const message_arr = [...messages, newMessage];
         saveMessages(newMessage.sender_id, newMessage.receiver_id, message_arr);
         dispatch(setMessage([...messages, newMessage]));
       } else {
-        console.log("GỬi tin nhắn thất bại");
+        alert("Hiện tại người dùng không online...");
       }
     });
   };
@@ -248,7 +264,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:7000/file/web", {
+      const response = await fetch(`${BACKEND_BASE}/file/web`, {
         method: "POST",
         body: formData,
       });
@@ -261,7 +277,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
         return;
       }
 
-      console.log("Upload thành công:", result);
+      // console.log("Upload thành công:", result);
 
       // Gửi tin nhắn chứa file
       const newMessage: IMessage = {
@@ -292,7 +308,7 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
             );
             dispatch(setMessage([...message_arr]));
           } else {
-            console.log("GỬi tin nhắn thất bại");
+            alert("Hiện tại người dùng không online...");
           }
         }
       );
@@ -320,3 +336,6 @@ export default function ChatBox({ user_login }: { user_login: IUser }) {
     </Card>
   );
 }
+
+const ChatMainMemo = memo(ChatMain);
+export default ChatMainMemo;

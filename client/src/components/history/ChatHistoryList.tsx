@@ -26,12 +26,12 @@
 //   },
 // ];
 
-import ChatHistoryItem from "@/components/history/ChatHistoryItem";
+import ChatHistoryItemMemo from "@/components/history/ChatHistoryItem";
 import { IUser } from "@/slices/authSlice";
 import { setSelectedUser } from "@/slices/chatSlice";
 import { RootState } from "@/store";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { memo, useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 export interface IMessage {
   message_id: string;
@@ -46,9 +46,12 @@ export interface IMessage {
   receiver_info?: IUser;
 }
 
-export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
+function ChatHistoryList({ user_login }: { user_login: IUser }) {
   const dispatch = useDispatch();
-  const messages = useSelector((state: RootState) => state.chat.messages);
+  const messages = useSelector(
+    (state: RootState) => state.chat.messages,
+    shallowEqual
+  );
   const [history_list, setHistoryList] = useState<IMessage[]>([]);
 
   useEffect(() => {
@@ -73,10 +76,11 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
     };
 
     getChatDataFromLocalStorage();
-  }, [messages]);
+  }, [messages, user_login]);
 
   const user_choose = useSelector(
-    (state: RootState) => state.chat.selectedUser
+    (state: RootState) => state.chat.selectedUser,
+    shallowEqual
   );
 
   const handleUserClick = (user_click: IUser | null) => {
@@ -90,14 +94,14 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
     dispatch(setSelectedUser(user_click));
   };
 
-  console.log("history_list", history_list);
+  // console.log("history_list", history_list);
 
   return (
     <div className="p-6 bg-gray-100 flex-1 border-l border-gray-300 shadow-sm h-full">
       <h2 className="text-xl font-bold mb-4">Lịch sử chát</h2>
       <div className="space-y-3 h-[90%] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 pr-4 pb-2">
         {history_list.map((msg) => (
-          <ChatHistoryItem
+          <ChatHistoryItemMemo
             key={msg.message_id}
             user={
               msg.sender_id === user_login.user_id
@@ -119,3 +123,6 @@ export default function ChatHistoryList({ user_login }: { user_login: IUser }) {
     </div>
   );
 }
+
+const ChatHistoryListMemo = memo(ChatHistoryList);
+export default ChatHistoryListMemo;
