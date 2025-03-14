@@ -2,7 +2,7 @@
 
 🚀 **Ứng dụng chat 1:1** sử dụng **React, Node.js, Socket.IO** giúp người dùng nhắn tin theo thời gian thực.
  
-[Demo](https://chat.kiemthecaofree.com)
+[Demo](https://chat-app.kiemthecaofree.com)
 ---
 
 ## 📌 **Tính năng chính**
